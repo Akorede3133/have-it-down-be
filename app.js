@@ -8,6 +8,12 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+app.use((error, req, res, next) => {
+  const message = error.message;
+  const status = error.statusCode || 500;
+  res.status(status).send({ message })
+})
+
 sequelize.sync().then(() => {
   console.log('Database connected');
   app.listen(process.env.PORT, () => {
