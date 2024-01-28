@@ -1,0 +1,21 @@
+{
+  "name": "have-it-down-be",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Akorede3133/have-it-down-be.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Akorede3133/have-it-down-be/issues"
+  },
+  "homepage": "https://github.com/Akorede3133/have-it-down-be#readme"
+}
