@@ -1,6 +1,7 @@
 import express from 'express';
 import { login } from '../controllers/authController.js';
 import { check } from 'express-validator';
+import isAuth from '../middlewares/isAuth.js';
 
 const authrouter = express.Router();
 
