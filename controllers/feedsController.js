@@ -1,9 +1,10 @@
 import { validationResult } from "express-validator"
 
-const create = async (req, res, next) => {
+export const create = async (req, res, next) => {
   try {
-    
+    const { title, content } = req.body;
+    console.log(title, content);
   } catch (error) {
-    
+    next(error)
   }
 }

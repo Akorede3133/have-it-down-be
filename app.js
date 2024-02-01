@@ -6,6 +6,7 @@ import registrationRouter from './routes/userRoutes.js';
 import authrouter from './routes/authRoutes.js';
 import cookieParser from 'cookie-parser';
 import editorRouter from './routes/editorRoutes.js';
+import feedRouter from './routes/feedRoutes.js';
 const app = express();
 
 app.use(express.json());
@@ -18,6 +19,7 @@ app.use(cookieParser());
 app.use('/api/v1', registrationRouter);
 app.use('/api/v1', authrouter);
 app.use(editorRouter);
+app.use('/api/v1/', feedRouter);
 
 app.use((error, req, res, next) => {
   const message = error.message;
