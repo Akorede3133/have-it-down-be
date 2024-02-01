@@ -4,10 +4,9 @@ import sequelize from "../config/database.js";
 const Feed = sequelize.define('Feed', {
   title: {
     type: DataTypes.STRING,
-    allowNull: false,
   },
   content: {
-    type: DataTypes.ARRAY,
+    type: DataTypes.ARRAY(DataTypes.JSON),
   },
   draft: {
     type: DataTypes.BOOLEAN,
