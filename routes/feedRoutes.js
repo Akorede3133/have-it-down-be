@@ -5,7 +5,7 @@ const feedRouter = express.Router();
 
 feedRouter.post('/feeds', create);
 feedRouter.put('/feeds/:id', update);
-feedRouter.get('/feeds/:id', index);
+feedRouter.get('/feeds', index);
 
 
 export default feedRouter;
