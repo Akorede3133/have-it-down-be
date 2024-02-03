@@ -4,8 +4,9 @@ import { handleError } from "../utils/errorUtil.js";
 
 export const create = async (req, res, next) => {
   try {
-    const { title, content } = req.body;
-    const feed = await Feed.create({title, content});
+    const { title, content, draft } = req.body;
+    console.log(title, content, draft);
+    const feed = await Feed.create({title, content, draft});
     res.status(201).send(feed);
   } catch (error) {
     next(error)
@@ -15,13 +16,23 @@ export const create = async (req, res, next) => {
 export const update = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { title, content } = req.body;
-    const feed = await Feed.findByPk(id);
-    if (!feed) {
-      handleError(404, 'No feed was found');
-    }
-    feed.update({title, content});
-    res.status(201).send(feed);
+    const { title, content, draft } = req.body;
+    console.log(id, content);
+    // const feed = await Feed.findByPk(id);
+    // if (!feed) {
+    //   handleError(404, 'No feed was found');
+    // }
+    // feed.update({title, content});
+    // res.status(201).send(feed);
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const index = async (req, res, next) => {
+  try {
+    const feeds = await Feed.findAll();
+    res.status(200).send(feeds);
   } catch (error) {
     next(error)
   }

@@ -1,9 +1,11 @@
 import express from 'express';
-import { create, update } from '../controllers/feedsController.js';
+import { create, index, update } from '../controllers/feedsController.js';
 
 const feedRouter = express.Router();
 
 feedRouter.post('/feeds', create);
 feedRouter.put('/feeds/:id', update);
+feedRouter.get('/feeds/:id', index);
+
 
 export default feedRouter;
