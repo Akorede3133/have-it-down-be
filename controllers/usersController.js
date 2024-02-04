@@ -39,7 +39,7 @@ export const register = async (req, res, next) => {
 export const currentUser = async (req, res, next) => {
   try {
     const { userId } = req;
-    const user = User.findByPk(userId);
+    const user = await User.findByPk(userId);
     if (!user) {
       handleError(401, 'Sign in');
     }

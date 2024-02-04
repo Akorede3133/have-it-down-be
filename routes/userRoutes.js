@@ -11,7 +11,7 @@ userRouter.post('/register', [
   check('password').notEmpty().withMessage('The password must be greater the 6 characters'),
 ], register);
 
-userRouter.get('/currenUser', isAuth, currentUser);
+userRouter.get('/currentUser', isAuth, currentUser);
 
 
 export default userRouter;

@@ -21,3 +21,18 @@ export const create = async (req, res, next) => {
     next(error);
   }
 }
+
+export const destroy = async (req, res, next) => {
+  try {
+    const { feedId, userId } = req.params;
+    const clap = await Clap.findOne({ where: { UserId: userId, FeedId: feedId } })
+    if (!clap) {
+      handleError(404, 'No clap');
+    }
+    await clap.destroy();
+    res.status(201).send({message: 'like destroyed'})
+
+  } catch (error) {
+    next(error);
+  }
+}
