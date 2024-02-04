@@ -11,6 +11,10 @@ const Feed = sequelize.define('Feed', {
   draft: {
     type: DataTypes.BOOLEAN,
     defaultValue: true,
+  },
+  claps: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
   }
 })
 

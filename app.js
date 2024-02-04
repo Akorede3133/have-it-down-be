@@ -10,6 +10,7 @@ import feedRouter from './routes/feedRoutes.js';
 import User from './models/userModel.js';
 import Feed from './models/FeedModel.js';
 import Clap from './models/clapModel.js';
+import clapRouter from './routes/clapRoutes.js';
 const app = express();
 
 app.use(express.json());
@@ -23,6 +24,8 @@ app.use('/api/v1', registrationRouter);
 app.use('/api/v1', authrouter);
 app.use(editorRouter);
 app.use('/api/v1/', feedRouter);
+app.use('/api/v1/', clapRouter);
+
 
 app.use((error, req, res, next) => {
   const message = error.message;
