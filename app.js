@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import 'dotenv/config';
 import sequelize from './config/database.js';
-import registrationRouter from './routes/userRoutes.js';
+import userRouter from './routes/userRoutes.js';
 import authrouter from './routes/authRoutes.js';
 import cookieParser from 'cookie-parser';
 import editorRouter from './routes/editorRoutes.js';
@@ -20,7 +20,7 @@ app.use(cors({
 }));
 app.use(cookieParser());
 
-app.use('/api/v1', registrationRouter);
+app.use('/api/v1', userRouter);
 app.use('/api/v1', authrouter);
 app.use(editorRouter);
 app.use('/api/v1/', feedRouter);

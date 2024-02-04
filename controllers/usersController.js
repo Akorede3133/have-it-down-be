@@ -35,3 +35,16 @@ export const register = async (req, res, next) => {
     next(error);
   }  
 }
+
+export const currentUser = async (req, res, next) => {
+  try {
+    const { userId } = req;
+    const user = User.findByPk(userId);
+    if (!user) {
+      handleError(401, 'Sign in');
+    }
+    res.status(200).send({ userId: user.id, name: user.name }) 
+  } catch (error) {
+    next(error)
+  }
+}
