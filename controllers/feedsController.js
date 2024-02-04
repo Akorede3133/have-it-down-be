@@ -2,6 +2,7 @@ import { validationResult } from "express-validator"
 import Feed from "../models/FeedModel.js";
 import { handleError } from "../utils/errorUtil.js";
 import User from "../models/userModel.js";
+import Clap from "../models/clapModel.js";
 
 export const create = async (req, res, next) => {
   try {
@@ -47,10 +48,18 @@ export const index = async (req, res, next) => {
 export const show = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const feed = await Feed.findByPk(id, { include: {
-      model: User,
-      attributes: ['name']
-    } });
+    const feed = await Feed.findByPk(id, {
+      include: [
+        {
+          model: User,
+          attributes: ['name'],
+        },
+        {
+          model: Clap,
+          attributes: ['UserId']
+        }
+      ]
+     });
     if (!feed) {
       handleError(404, 'No feed was found');
     }

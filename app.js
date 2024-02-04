@@ -35,12 +35,12 @@ app.use((error, req, res, next) => {
 
 User.hasMany(Feed);
 Feed.belongsTo(User);
-User.hasOne(Clap);
-Clap.belongsTo(User);
-Feed.hasMany(Clap);
-Clap.belongsTo(Feed);
+User.hasOne(Clap, { foreignKey: 'UserId'});
+Clap.belongsTo(User, { foreignKey: 'UserId'});
+Feed.hasMany(Clap, { foreignKey: 'FeedId'});
+Clap.belongsTo(Feed, { foreignKey: 'FeedId'});
 
-sequelize.sync().then(() => {
+sequelize.sync({ alter: true }).then(() => {
   console.log('Database connected');
   app.listen(process.env.PORT, () => {
     console.log(`Server connected: listening on port ${process.env.PORT}`);
