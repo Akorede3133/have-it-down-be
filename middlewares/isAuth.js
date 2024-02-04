@@ -5,7 +5,7 @@ const isAuth = (req, res, next) => {
   const { auth_token } = req.cookies;
   try {
     if (!auth_token) {
-      handleError(401, 'Sign in')
+      handleError(401, 'You have to sign in to perform this action.')
     }
     jwt.verify(auth_token, process.env.JWT_SECRET_KEY, (err, value) => {
       if (err) {

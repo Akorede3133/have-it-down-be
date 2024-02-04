@@ -7,6 +7,8 @@ import authrouter from './routes/authRoutes.js';
 import cookieParser from 'cookie-parser';
 import editorRouter from './routes/editorRoutes.js';
 import feedRouter from './routes/feedRoutes.js';
+import User from './models/userModel.js';
+import Feed from './models/FeedModel.js';
 const app = express();
 
 app.use(express.json());
@@ -26,6 +28,9 @@ app.use((error, req, res, next) => {
   const status = error.statusCode || 500;
   res.status(status).send({ message })
 })
+
+User.hasMany(Feed);
+Feed.belongsTo(User);
 
 sequelize.sync().then(() => {
   console.log('Database connected');

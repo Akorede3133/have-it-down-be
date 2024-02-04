@@ -1,12 +1,15 @@
 import { validationResult } from "express-validator"
 import Feed from "../models/FeedModel.js";
 import { handleError } from "../utils/errorUtil.js";
+import User from "../models/userModel.js";
 
 export const create = async (req, res, next) => {
   try {
+    const userId  = req.userId;
     const { title, content, draft } = req.body;
+    const user = await User.findByPk(userId)
     console.log(title, content, draft);
-    const feed = await Feed.create({title, content, draft});
+    const feed = await user.createFeed({title, content, draft});
     res.status(201).send(feed);
   } catch (error) {
     next(error)
