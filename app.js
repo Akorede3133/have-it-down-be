@@ -9,6 +9,7 @@ import editorRouter from './routes/editorRoutes.js';
 import feedRouter from './routes/feedRoutes.js';
 import User from './models/userModel.js';
 import Feed from './models/FeedModel.js';
+import Clap from './models/clapModel.js';
 const app = express();
 
 app.use(express.json());
@@ -31,6 +32,10 @@ app.use((error, req, res, next) => {
 
 User.hasMany(Feed);
 Feed.belongsTo(User);
+User.hasOne(Clap);
+Clap.belongsTo(User);
+Feed.hasMany(Clap);
+Clap.belongsTo(Feed);
 
 sequelize.sync().then(() => {
   console.log('Database connected');
