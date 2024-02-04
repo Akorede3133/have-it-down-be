@@ -34,7 +34,10 @@ export const update = async (req, res, next) => {
 
 export const index = async (req, res, next) => {
   try {
-    const feeds = await Feed.findAll();
+    const feeds = await Feed.findAll({ include: {
+      model: User,
+      attributes: ['name']
+    } });
     res.status(200).send(feeds);
   } catch (error) {
     next(error)
@@ -44,7 +47,10 @@ export const index = async (req, res, next) => {
 export const show = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const feed = await Feed.findByPk(id);
+    const feed = await Feed.findByPk(id, { include: {
+      model: User,
+      attributes: ['name']
+    } });
     if (!feed) {
       handleError(404, 'No feed was found');
     }
