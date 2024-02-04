@@ -37,3 +37,17 @@ export const index = async (req, res, next) => {
     next(error)
   }
 }
+
+export const show = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const feed = await Feed.findByPk(id);
+    if (!feed) {
+      handleError(404, 'No feed was found');
+    }
+    res.status(200).send(feed);
+
+  } catch (error) {
+    next(error)
+  }
+}
