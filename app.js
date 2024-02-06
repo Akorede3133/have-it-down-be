@@ -11,6 +11,7 @@ import User from './models/userModel.js';
 import Feed from './models/FeedModel.js';
 import Clap from './models/clapModel.js';
 import clapRouter from './routes/clapRoutes.js';
+import Comment from './models/commentModel.js';
 const app = express();
 
 app.use(express.json());
@@ -39,6 +40,10 @@ User.hasOne(Clap, { foreignKey: 'UserId'});
 Clap.belongsTo(User, { foreignKey: 'UserId'});
 Feed.hasMany(Clap, { foreignKey: 'FeedId'});
 Clap.belongsTo(Feed, { foreignKey: 'FeedId'});
+Feed.hasMany(Comment, { foreignKey: 'FeedId' });
+Comment.belongsTo(Feed, { foreignKey: 'FeedId' });
+Comment.hasMany(Comment, { as: 'replies', foreignKey: 'parentId' });
+Comment.belongsTo(Comment, { foreignKey: 'parentId' });
 
 sequelize.sync({ alter: true }).then(() => {
   console.log('Database connected');
