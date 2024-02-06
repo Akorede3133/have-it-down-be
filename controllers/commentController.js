@@ -1,0 +1,27 @@
+import Feed from "../models/FeedModel.js";
+import Comment from "../models/commentModel.js";
+import User from "../models/userModel.js";
+import { handleError } from "../utils/errorUtil.js";
+
+export const create = async (req, res, next) => {
+  try {
+    const { userId } =  req;
+    const { feedId, parentId } = req.params;
+    const { content } = req.body;
+    const user = await User.findByPk(userId);
+    const feed = await Feed.findByPk(feedId);
+    const parent = await Comment.findByPk(parentId);
+    let comment;
+    if (feed && !parent) {
+     comment = await user.createComment({ content, FeedId: feedId })
+    } else if (!feed && parent) {
+      comment = await user.createComment({ content, parentId })
+    } else {
+      handleError(404, 'something went wrong')
+    }
+    res.status(201).send({ message: 'commented', comment })
+
+  } catch (error) {
+    next(error)    
+  }
+}

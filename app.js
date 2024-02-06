@@ -12,6 +12,7 @@ import Feed from './models/FeedModel.js';
 import Clap from './models/clapModel.js';
 import clapRouter from './routes/clapRoutes.js';
 import Comment from './models/commentModel.js';
+import commentRouter from './routes/commentRoutes.js';
 const app = express();
 
 app.use(express.json());
@@ -26,6 +27,8 @@ app.use('/api/v1', authrouter);
 app.use(editorRouter);
 app.use('/api/v1/', feedRouter);
 app.use('/api/v1/', clapRouter);
+app.use('/api/v1/', commentRouter);
+
 
 
 app.use((error, req, res, next) => {
