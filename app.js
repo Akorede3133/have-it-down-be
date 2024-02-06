@@ -44,6 +44,9 @@ Feed.hasMany(Comment, { foreignKey: 'FeedId' });
 Comment.belongsTo(Feed, { foreignKey: 'FeedId' });
 Comment.hasMany(Comment, { as: 'replies', foreignKey: 'parentId' });
 Comment.belongsTo(Comment, { foreignKey: 'parentId' });
+User.hasMany(Comment, { foreignKey: 'UserId' })
+Comment.belongsTo(User, { foreignKey: 'UserId' })
+
 
 sequelize.sync({ alter: true }).then(() => {
   console.log('Database connected');
