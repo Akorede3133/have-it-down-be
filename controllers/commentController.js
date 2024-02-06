@@ -6,22 +6,40 @@ import { handleError } from "../utils/errorUtil.js";
 export const create = async (req, res, next) => {
   try {
     const { userId } =  req;
-    const { feedId, parentId } = req.params;
+    const { feedId } = req.params;
     const { content } = req.body;
     const user = await User.findByPk(userId);
     const feed = await Feed.findByPk(feedId);
-    const parent = await Comment.findByPk(parentId);
-    let comment;
-    if (feed && !parent) {
-     comment = await user.createComment({ content, FeedId: feedId })
-    } else if (!feed && parent) {
-      comment = await user.createComment({ content, parentId })
-    } else {
-      handleError(404, 'something went wrong')
-    }
+    if (!feed) {
+      handleError(404, 'no feed found')
+    } 
+    const comment = await user.createComment({ content, FeedId: feedId })
     res.status(201).send({ message: 'commented', comment })
 
   } catch (error) {
     next(error)    
   }
 }
+
+// export const createReply = async (req, res, next) => {
+//   try {
+//     const { userId } =  req;
+//     const { feedId, parentId } = req.params;
+//     const { content } = req.body;
+//     const user = await User.findByPk(userId);
+//     const feed = await Feed.findByPk(feedId);
+//     const parent = await Comment.findByPk(parentId);
+//     let comment;
+//     if (feed && !parent) {
+//      comment = await user.createComment({ content, FeedId: feedId })
+//     } else if (!feed && parent) {
+//       comment = await user.createComment({ content, parentId })
+//     } else {
+//       handleError(404, 'something went wrong')
+//     }
+//     res.status(201).send({ message: 'commented', comment })
+
+//   } catch (error) {
+//     next(error)    
+//   }
+// }

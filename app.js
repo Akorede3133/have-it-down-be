@@ -15,19 +15,21 @@ import Comment from './models/commentModel.js';
 import commentRouter from './routes/commentRoutes.js';
 const app = express();
 
-app.use(express.json());
 app.use(cors({
   origin: 'http://localhost:5173',
-  credentials: true
+  credentials: true,
 }));
-app.use(cookieParser());
 
+app.use(cookieParser());
+app.use(express.json());
+
+
+app.use('/api/v1/', commentRouter);
 app.use('/api/v1', userRouter);
 app.use('/api/v1', authrouter);
 app.use(editorRouter);
 app.use('/api/v1/', feedRouter);
 app.use('/api/v1/', clapRouter);
-app.use('/api/v1/', commentRouter);
 
 
 
