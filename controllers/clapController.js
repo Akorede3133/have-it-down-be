@@ -60,3 +60,20 @@ export const createCommentClap = async (req, res, next) => {
     next(error);
   }
 }
+
+export const destroyCommentClap = async (req, res, next) => {
+  try {
+    const { commentId, userId } = req.params;
+    const comment = await Comment.findByPk(commentId);
+    const clap = await Clap.findOne({ where: { UserId: userId, CommentId: commentId } })
+    if (!clap) {
+      handleError(404, 'No clap');
+    }
+    await clap.destroy();
+    await comment.decrement('claps');
+    res.status(201).send({message: 'like destroyed'})
+
+  } catch (error) {
+    next(error);
+  }
+}
