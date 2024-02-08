@@ -58,17 +58,11 @@ const getRepliesRecursive = async (commentId) => {
       {
         model: Comment,
         as: 'replies',
-        include: [
-          {
-            model: User,
-            attributes: ['name'],
-          },
-          {
-            model: Clap,
-            attributes: ['UserId']
-          }
-        ],
       },
+      {
+        model: Clap,
+        attributes: ['UserId']
+      }
     ],
   });
 
@@ -120,6 +114,7 @@ export const show = async (req, res, next) => {
             },
             {
               model: Clap,
+              attributes: ['UserId']
             }
           ],
         },
