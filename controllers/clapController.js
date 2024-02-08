@@ -44,7 +44,6 @@ export const createCommentClap = async (req, res, next) => {
   try {
     const userId = req.userId;
     const { commentId } = req.params;
-    console.log(feedId);
     const comment = await Comment.findByPk(commentId);
     const user = await User.findByPk(userId);
     if (!comment || !user) {

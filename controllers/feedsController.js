@@ -63,6 +63,10 @@ const getRepliesRecursive = async (commentId) => {
             model: User,
             attributes: ['name'],
           },
+          {
+            model: Clap,
+            attributes: ['UserId']
+          }
         ],
       },
     ],
@@ -84,6 +88,7 @@ const getRepliesRecursive = async (commentId) => {
 export const show = async (req, res, next) => {
   try {
     const { id } = req.params;
+    console.log(id);
     const feed = await Feed.findByPk(id, {
       include: [
         {
@@ -96,7 +101,8 @@ export const show = async (req, res, next) => {
         },
         {
           model: Comment,
-          where: { parentId: null }, // Fetch only top-level comments
+          // as: 'Comments',
+          // where: { parentId: null }, // Fetch only top-level comments
           include: [
             {
               model: User,
@@ -112,6 +118,9 @@ export const show = async (req, res, next) => {
                 },
               ],
             },
+            {
+              model: Clap,
+            }
           ],
         },
       ],
@@ -121,18 +130,24 @@ export const show = async (req, res, next) => {
       handleError(404, 'No feed was found');
     }
 
-    // Fetch nested replies for each top-level comment
-    const topLevelRepliesPromises = feed.Comments.map((comment) =>
-      getRepliesRecursive(comment.id)
-    );
-    const topLevelReplies = await Promise.all(topLevelRepliesPromises);
-
-    // Attach nested replies to each top-level comment
-    feed.Comments.forEach((comment, index) => {
-      comment.dataValues.replies = topLevelReplies[index];
-    });
-
-    res.status(200).send(feed);
+      // Check if feed has comments before processing them
+      if (feed.Comments) {
+        // If Comments is null, convert it to an empty array
+        const topLevelComments = feed.Comments || [];
+  
+        // Fetch nested replies for each top-level comment
+        const topLevelRepliesPromises = topLevelComments.map((comment) =>
+          getRepliesRecursive(comment.id)
+        );
+        const topLevelReplies = await Promise.all(topLevelRepliesPromises);
+  
+        // Attach nested replies to each top-level comment
+        topLevelComments.forEach((comment, index) => {
+          comment.dataValues.replies = topLevelReplies[index];
+        });
+      }
+  
+      res.status(200).send(feed);
   } catch (error) {
     next(error);
   }
@@ -140,48 +155,3 @@ export const show = async (req, res, next) => {
 
 
 
-
-// export const show = async (req, res, next) => {
-//   try {
-//     const { id } = req.params;
-//     const feed = await Feed.findByPk(id, {
-//       include: [
-//         {
-//           model: User,
-//           attributes: ['name'],
-//         },
-//         {
-//           model: Clap,
-//           attributes: ['UserId'],
-//         },
-//         {
-//           model: Comment,
-//           include: [
-//             {
-//               model: User,
-//               attributes: ['name'],
-//             },
-//             {
-//               model: Comment, // Use 'model' when including the association without an alias
-//               as: 'replies',
-//               include: [
-//                 {
-//                   model: User,
-//                   attributes: ['name'],
-//                 },
-//               ],
-//             },
-//           ],
-//         },
-//       ],
-//     });
-
-//     if (!feed) {
-//       handleError(404, 'No feed was found');
-//     }
-
-//     res.status(200).send(feed);
-//   } catch (error) {
-//     next(error);
-//   }
-// };
