@@ -38,3 +38,16 @@ export const createReply = async (req, res, next) => {
     next(error)    
   }
 }
+
+const getComments = async (req, res, next) => {
+  try {
+    const { feedId } = req.params;
+    const feed = Feed.findByPk(feedId);
+    if (!feed) {
+      handleError(404, 'no feed found')
+    }
+    // const comments = 
+  } catch (error) {
+    
+  }
+}

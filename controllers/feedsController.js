@@ -3,6 +3,7 @@ import Feed from "../models/FeedModel.js";
 import { handleError } from "../utils/errorUtil.js";
 import User from "../models/userModel.js";
 import Clap from "../models/clapModel.js";
+import Comment from "../models/commentModel.js";
 
 export const create = async (req, res, next) => {
   try {
@@ -45,6 +46,41 @@ export const index = async (req, res, next) => {
   }
 }
 
+// Recursive function to fetch nested replies
+const getRepliesRecursive = async (commentId) => {
+  const replies = await Comment.findAll({
+    where: { parentId: commentId },
+    include: [
+      {
+        model: User,
+        attributes: ['name'],
+      },
+      {
+        model: Comment,
+        as: 'replies',
+        include: [
+          {
+            model: User,
+            attributes: ['name'],
+          },
+        ],
+      },
+    ],
+  });
+
+  // Recursively fetch replies for each reply
+  const nestedRepliesPromises = replies.map((reply) =>
+    getRepliesRecursive(reply.id)
+  );
+  const nestedReplies = await Promise.all(nestedRepliesPromises);
+  // Attach nested replies to each reply
+  replies.forEach((reply, index) => {
+    reply.dataValues.replies = nestedReplies[index];
+  });
+
+  return replies;
+};
+
 export const show = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -56,16 +92,96 @@ export const show = async (req, res, next) => {
         },
         {
           model: Clap,
-          attributes: ['UserId']
-        }
-      ]
-     });
+          attributes: ['UserId'],
+        },
+        {
+          model: Comment,
+          where: { parentId: null }, // Fetch only top-level comments
+          include: [
+            {
+              model: User,
+              attributes: ['name'],
+            },
+            {
+              model: Comment,
+              as: 'replies',
+              include: [
+                {
+                  model: User,
+                  attributes: ['name'],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+
     if (!feed) {
       handleError(404, 'No feed was found');
     }
-    res.status(200).send(feed);
 
+    // Fetch nested replies for each top-level comment
+    const topLevelRepliesPromises = feed.Comments.map((comment) =>
+      getRepliesRecursive(comment.id)
+    );
+    const topLevelReplies = await Promise.all(topLevelRepliesPromises);
+
+    // Attach nested replies to each top-level comment
+    feed.Comments.forEach((comment, index) => {
+      comment.dataValues.replies = topLevelReplies[index];
+    });
+
+    res.status(200).send(feed);
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
+
+
+
+
+// export const show = async (req, res, next) => {
+//   try {
+//     const { id } = req.params;
+//     const feed = await Feed.findByPk(id, {
+//       include: [
+//         {
+//           model: User,
+//           attributes: ['name'],
+//         },
+//         {
+//           model: Clap,
+//           attributes: ['UserId'],
+//         },
+//         {
+//           model: Comment,
+//           include: [
+//             {
+//               model: User,
+//               attributes: ['name'],
+//             },
+//             {
+//               model: Comment, // Use 'model' when including the association without an alias
+//               as: 'replies',
+//               include: [
+//                 {
+//                   model: User,
+//                   attributes: ['name'],
+//                 },
+//               ],
+//             },
+//           ],
+//         },
+//       ],
+//     });
+
+//     if (!feed) {
+//       handleError(404, 'No feed was found');
+//     }
+
+//     res.status(200).send(feed);
+//   } catch (error) {
+//     next(error);
+//   }
+// };

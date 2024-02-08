@@ -5,6 +5,6 @@ import isAuth from '../middlewares/isAuth.js';
 const commentRouter = express.Router();
 
 commentRouter.post('/comments/:feedId', isAuth, create);
-commentRouter.post('/comments/:parentId', isAuth, createReply)
+commentRouter.post('/replies/:parentId', isAuth, createReply)
 
 export default commentRouter;
