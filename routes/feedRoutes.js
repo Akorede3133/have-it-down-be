@@ -6,8 +6,8 @@ const feedRouter = express.Router();
 
 feedRouter.post('/feeds', isAuth, create);
 feedRouter.put('/feeds/:id', isAuth, update);
-feedRouter.get('/feeds', index);
-feedRouter.get('/feeds/:id', show);
+feedRouter.get('/feeds', isAuth, index);
+feedRouter.get('/feeds/:id', isAuth, show);
 
 
 

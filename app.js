@@ -51,6 +51,8 @@ Comment.hasMany(Comment, { as: 'replies', foreignKey: 'parentId' });
 Comment.belongsTo(Comment, { foreignKey: 'parentId' });
 User.hasMany(Comment, { foreignKey: 'UserId' })
 Comment.belongsTo(User, { foreignKey: 'UserId' })
+Comment.hasMany(Clap, { foreignKey: 'CommentId' })
+Clap.belongsTo(Comment, { foreignKey: 'CommentId'})
 
 
 sequelize.sync({ alter: true }).then(() => {
