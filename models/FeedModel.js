@@ -15,7 +15,8 @@ const Feed = sequelize.define('Feed', {
   claps: {
     type: DataTypes.INTEGER,
     defaultValue: 0,
-  }
+  },
+  tags: DataTypes.ARRAY(DataTypes.STRING)
 })
 
 export default Feed;

@@ -23,7 +23,7 @@ export const register = async (req, res, next) => {
       password: await bcrypt.hash(password, 12)
     });
     const token = jwt.sign({ userId: newUser.id }, process.env.JWT_SECRET_KEY, {
-      expiresIn: "1h"
+      expiresIn: "24h"
     });
     res.cookie('auth_token', token, {
       httpOnly: true,

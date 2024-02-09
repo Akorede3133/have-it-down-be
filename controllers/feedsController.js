@@ -8,10 +8,10 @@ import Comment from "../models/commentModel.js";
 export const create = async (req, res, next) => {
   try {
     const userId  = req.userId;
-    const { title, content, draft } = req.body;
+    const { title, content, draft, tags } = req.body;
     const user = await User.findByPk(userId)
-    console.log(title, content, draft);
-    const feed = await user.createFeed({title, content, draft});
+    console.log(title, content, draft, tags);
+    const feed = await user.createFeed({title, content, draft, tags});
     res.status(201).send(feed);
   } catch (error) {
     next(error)
